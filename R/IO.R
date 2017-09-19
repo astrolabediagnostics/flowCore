@@ -193,6 +193,150 @@ read.FCS <- function(filename,
     return(tmp)
 }
 
+.read.FCS <- function(filename,
+    transformation="linearize",
+    which.lines=NULL,
+    alter.names=FALSE,
+    column.pattern=NULL,
+    invert.pattern = FALSE,
+    decades=0,
+    ncdf=FALSE,
+    min.limit=NULL,
+    truncate_max_range = TRUE,
+    dataset=NULL,
+    emptyValue=TRUE
+   , fast = TRUE
+    , ...)
+{
+  if(ncdf)
+    .Deprecated("'ncdf' argument is deprecated!Please use 'ncdfFlow' package for disk-based data structure.")
+  ## check file name
+  if(!is.character(filename) ||  length(filename)!=1)
+    stop("'filename' must be character skalar")
+  if(!file.exists(filename))
+    stop(paste("'", filename, "' is not a valid file", sep=""))
+  con <- file(filename, open="rb")
+  on.exit(close(con))
+  
+  ## transform or scale data?
+  fcsPnGtransform <- FALSE
+  if(is.logical(transformation) && transformation ||
+      !is.null(transformation) && transformation == "linearize") {
+    transformation <- TRUE
+    scale <- FALSE
+  } else if ( !is.null(transformation) && transformation == "scale") {
+    transformation <- TRUE
+    scale <- TRUE
+  } else if ( !is.null(transformation) && transformation == "linearize-with-PnG-scaling") {
+    transformation <- TRUE
+    scale <- FALSE
+    fcsPnGtransform <- TRUE
+  } else if (is.null(transformation) || is.logical(transformation) &&
+      !transformation) {
+    transformation <- FALSE
+    scale <- FALSE
+  }
+  if(fast)
+  {
+    cytofrm <- parseFCS(filename, emptyValue, dataset = dataset, scale, decades, min.limit, truncate_max_range ) 
+  }else
+  {
+      
+    ## read the file
+    offsets <- findOffsets(con,emptyValue=emptyValue, dataset = dataset, ...)
+    
+    txt <- readFCStext(con, offsets,emptyValue=emptyValue, ...)
+    ## We only transform if the data in the FCS file hasn't already been
+    ## transformed before
+    if (fcsPnGtransform) txt[["flowCore_fcsPnGtransform"]] <- "linearize-with-PnG-scaling"
+    if("transformation" %in% names(txt) &&
+        txt[["transformation"]] %in% c("applied", "custom"))
+      transformation <- FALSE
+    mat <- readFCSdata(con, offsets, txt, transformation, which.lines,
+        scale, alter.names, decades, min.limit, truncate_max_range)
+    matRanges <- attr(mat,"ranges")
+    
+    
+    id <- paste("$P",1:ncol(mat),sep="")
+    zeroVals <- as.numeric(sapply(strsplit(txt[paste(id,"E",sep="")], ","),
+            function(x) x[2]))
+    
+    absMin <- colMins(mat,,na.rm=TRUE) # replace apply with matrixStats::colMins to speed up
+    # absMin <- apply(mat,2,min,na.rm=TRUE)
+    realMin <- pmin(zeroVals,pmax(-111, absMin, na.rm=TRUE), na.rm=TRUE)
+    
+    if("transformation" %in% names(txt) && txt[["transformation"]] == "custom") {
+      for(i in seq_along(colnames(mat))) {
+        realMin[i] <- as.numeric(txt[[sprintf("flowCore_$P%sRmin", i)]])
+      }
+    }
+  }
+  params <- makeFCSparameters(colnames(mat),txt, transformation, scale,
+      decades, realMin)
+  
+  ## only keep certain parameters
+  if(!is.null(column.pattern)) {
+    n <- colnames(mat)
+    i <- grep(column.pattern, n, invert = invert.pattern)
+    
+    mat <- mat[,i,drop=FALSE]
+    params <- params[i,]
+  }
+  
+  ## check for validity
+  if(is.null(which.lines)){
+    if(as.integer(readFCSgetPar(txt, "$TOT"))!=nrow(mat))
+      stop(paste("file", filename, "seems to be corrupted."))
+  }
+  
+  ## set transformed flag and fix the PnE and the Datatype keywords
+  ## also add our own PnR fields.
+  txt[["FILENAME"]] <- filename
+  if(transformation==TRUE) {
+    txt[["transformation"]] <-"applied"
+    for(p in seq_along(pData(params)$name)) {
+      txt[[sprintf("$P%sE", p)]] <- sprintf("0,%g", 0)
+      txt[[sprintf("flowCore_$P%sRmax", p)]] <- matRanges[p] +1
+      txt[[sprintf("flowCore_$P%sRmin", p)]] <- realMin[p]
+    }
+    txt[["$DATATYPE"]] <- "F"
+  }
+  ## build description from FCS parameters
+  
+  if(offsets["FCSversion"]<=2)
+  {
+    description <- strsplit(txt,split="\n")
+    names(description) <- names(txt)
+    
+  }else
+  {
+    description <- strsplit(txt, split=NA) # not really splitting, but converting the data structure}
+  }
+  
+  
+  ## the spillover matrix
+  for(sn in .spillover_pattern){
+    sp <- description[[sn]]
+    if(!is.null(sp)){
+      splt <- strsplit(sp, ",")[[1]]
+      nrCols <- as.numeric(splt[1])
+      cnames <- splt[2:(nrCols+1)]
+      vals <- as.numeric(splt[(nrCols+2):length(splt)])
+      spmat <- matrix(vals, ncol=nrCols, byrow=TRUE)
+      if(alter.names)
+        cnames <- make.names(cnames)
+      colnames(spmat) <- cnames
+      description[[sn]] <- spmat
+    }
+  }
+  tmp <- new("flowFrame", exprs=mat, description= description,
+      parameters=params)
+  identifier(tmp) <- basename(identifier(tmp))
+  
+  return(tmp)
+}
+
+
 
 ## ==========================================================================
 ## create AnnotatedDataFrame describing the flow parameters (channels)
