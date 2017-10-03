@@ -58,6 +58,7 @@ Collate:
     rectangleGate-accessors.R
     workFlow-accessors.R
     filterResultList-accessors.R
+    cytoFrame.R
     IO.R
     show-methods.R
     length-methods.R
@@ -72,7 +73,7 @@ Collate:
     RcppExports.R
 License: Artistic-2.0
 biocViews: Infrastructure, FlowCytometry, CellBasedAssays
-LinkingTo: Rcpp, BH(>= 1.65.0.1)
+LinkingTo: Rcpp, BH(>= 1.65.0.1), RProtoBufLib, cytolib
 VignetteBuilder: knitr
 SystemRequirements: GNU make, C++11
 RoxygenNote: 5.0.1

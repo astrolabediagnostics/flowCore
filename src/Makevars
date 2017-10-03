@@ -1,4 +1,5 @@
 CXX_STD = CXX11
+PKG_LIBS =`${R_HOME}/bin/Rscript -e "cytolib:::LdFlags()"`
 
 .PHONY: all clean 
 

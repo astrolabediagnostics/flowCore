@@ -2,38 +2,62 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 biexponential_transform <- function(input, A, B, C, D, F, W, tol, maxIt) {
-    .Call(flowCore_biexponential_transform, input, A, B, C, D, F, W, tol, maxIt)
+    .Call(`_flowCore_biexponential_transform`, input, A, B, C, D, F, W, tol, maxIt)
 }
 
 convertRawBytes <- function(bytes, isInt, colSize, ncol, isBigEndian) {
-    .Call(flowCore_convertRawBytes, bytes, isInt, colSize, ncol, isBigEndian)
+    .Call(`_flowCore_convertRawBytes`, bytes, isInt, colSize, ncol, isBigEndian)
 }
 
 fcsTextParse <- function(txt, emptyValue) {
-    .Call(flowCore_fcsTextParse, txt, emptyValue)
+    .Call(`_flowCore_fcsTextParse`, txt, emptyValue)
 }
 
 hyperlog_transform <- function(input, T, W, M, A, isInverse) {
-    .Call(flowCore_hyperlog_transform, input, T, W, M, A, isInverse)
+    .Call(`_flowCore_hyperlog_transform`, input, T, W, M, A, isInverse)
 }
 
 inPolygon <- function(data, vertices) {
-    .Call(flowCore_inPolygon, data, vertices)
+    .Call(`_flowCore_inPolygon`, data, vertices)
 }
 
 inPolytope <- function(data, A, b) {
-    .Call(flowCore_inPolytope, data, A, b)
+    .Call(`_flowCore_inPolytope`, data, A, b)
 }
 
 logicle_transform <- function(input, T, W, M, A, isInverse) {
-    .Call(flowCore_logicle_transform, input, T, W, M, A, isInverse)
+    .Call(`_flowCore_logicle_transform`, input, T, W, M, A, isInverse)
+}
+
+parseFCS <- function(filename, transformation = "linearize", decades = 0, truncate_min_val = FALSE, min_limit = -111, truncate_max_range = TRUE, dataset = 1L, emptyValue = TRUE, ignoreTextOffset = TRUE, onlyTxt = FALSE) {
+    .Call(`_flowCore_parseFCS`, filename, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt)
+}
+
+getData <- function(fr) {
+    .Call(`_flowCore_getData`, fr)
+}
+
+getncol <- function(fr) {
+    .Call(`_flowCore_getncol`, fr)
+}
+
+getnrow <- function(fr) {
+    .Call(`_flowCore_getnrow`, fr)
+}
+
+getpdata <- function(fr) {
+    .Call(`_flowCore_getpdata`, fr)
+}
+
+isCytoLibOptimum <- function() {
+    .Call(`_flowCore_isCytoLibOptimum`)
 }
 
 sortBytes <- function(bytes, byte_order) {
-    .Call(flowCore_sortBytes, bytes, byte_order)
+    .Call(`_flowCore_sortBytes`, bytes, byte_order)
 }
 
 uint2double <- function(input, isBigEndian) {
-    .Call(flowCore_uint2double, input, isBigEndian)
+    .Call(`_flowCore_uint2double`, input, isBigEndian)
 }
 
