@@ -80,7 +80,7 @@ read.FCS <- function(filename,
       min.limit <- -111
     }else
       truncate_min_val <- TRUE
-    fr@pointer <- parseFCS(filename, transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue,...)
+    fr@pointer <- parseFCS(normalizePath(filename), transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue,...)
     return(fr)
   }
     

@@ -30,10 +30,10 @@ test_that("big file", {
 })
 
 test_that("DATATYPE:'D'", {
-  expect_warning(fr <- read.FCS(file.path(dataPath, "double_precision/wishbone_myleoid_monocyte.fcs")), "Missing the required")
+  expect_output(fr <- read.FCS(file.path(dataPath, "double_precision/wishbone_myleoid_monocyte.fcs")), "Missing the required")
   expect_is(fr, "flowFrame")
   filename  <- "wishbone_thymus_panel1_rep1.fcs"
-  expect_warning(fr <- read.FCS(file.path(dataPath, "double_precision", filename)), "Missing the required")
+  expect_output(fr <- read.FCS(file.path(dataPath, "double_precision", filename)), "Missing the required")
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
   expect_equal(nrow(fr), 250170)
   
@@ -41,7 +41,9 @@ test_that("DATATYPE:'D'", {
 
 
 test_that("multi data segment", {
-  expect_warning(fr <- read.FCS(file.path(dataPath, "multi-datasegment.fcs")), "39 additional data")
+  # expect_warning(
+    fr <- read.FCS(file.path(dataPath, "multi-datasegment.fcs"))
+    # , "39 additional data")
   expect_is(fr, "flowFrame")
   
   expect_equal(nrow(fr), 1244)
