@@ -110,8 +110,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // parseFCS
-Rcpp::XPtr<MemCytoFrame> parseFCS(string filename, string transformation, float decades, bool truncate_min_val, float min_limit, bool truncate_max_range, int dataset, bool emptyValue, bool ignoreTextOffset, bool onlyTxt);
-RcppExport SEXP _flowCore_parseFCS(SEXP filenameSEXP, SEXP transformationSEXP, SEXP decadesSEXP, SEXP truncate_min_valSEXP, SEXP min_limitSEXP, SEXP truncate_max_rangeSEXP, SEXP datasetSEXP, SEXP emptyValueSEXP, SEXP ignoreTextOffsetSEXP, SEXP onlyTxtSEXP) {
+Rcpp::XPtr<MemCytoFrame> parseFCS(string filename, string transformation, float decades, bool truncate_min_val, float min_limit, bool truncate_max_range, int dataset, bool emptyValue, bool ignoreTextOffset, bool onlyTxt, int num_threads);
+RcppExport SEXP _flowCore_parseFCS(SEXP filenameSEXP, SEXP transformationSEXP, SEXP decadesSEXP, SEXP truncate_min_valSEXP, SEXP min_limitSEXP, SEXP truncate_max_rangeSEXP, SEXP datasetSEXP, SEXP emptyValueSEXP, SEXP ignoreTextOffsetSEXP, SEXP onlyTxtSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -125,7 +125,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< bool >::type emptyValue(emptyValueSEXP);
     Rcpp::traits::input_parameter< bool >::type ignoreTextOffset(ignoreTextOffsetSEXP);
     Rcpp::traits::input_parameter< bool >::type onlyTxt(onlyTxtSEXP);
-    rcpp_result_gen = Rcpp::wrap(parseFCS(filename, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt));
+    Rcpp::traits::input_parameter< int >::type num_threads(num_threadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(parseFCS(filename, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt, num_threads));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -216,7 +217,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_flowCore_inPolygon", (DL_FUNC) &_flowCore_inPolygon, 2},
     {"_flowCore_inPolytope", (DL_FUNC) &_flowCore_inPolytope, 3},
     {"_flowCore_logicle_transform", (DL_FUNC) &_flowCore_logicle_transform, 6},
-    {"_flowCore_parseFCS", (DL_FUNC) &_flowCore_parseFCS, 10},
+    {"_flowCore_parseFCS", (DL_FUNC) &_flowCore_parseFCS, 11},
     {"_flowCore_getData", (DL_FUNC) &_flowCore_getData, 1},
     {"_flowCore_getncol", (DL_FUNC) &_flowCore_getncol, 1},
     {"_flowCore_getnrow", (DL_FUNC) &_flowCore_getnrow, 1},

@@ -15,7 +15,8 @@ Rcpp::XPtr<MemCytoFrame> parseFCS(string filename, string transformation="linear
                       int dataset = 1,
                       bool emptyValue= true,
                       bool ignoreTextOffset = true,
-                      bool onlyTxt = false)
+                      bool onlyTxt = false,
+                      int num_threads = 1)
 {
 
   	FCS_READ_PARAM config;
@@ -27,6 +28,7 @@ Rcpp::XPtr<MemCytoFrame> parseFCS(string filename, string transformation="linear
     config.data.truncate_min_val = truncate_min_val;
     config.data.min_limit = min_limit;
     config.data.truncate_max_range = truncate_max_range;
+    config.data.num_threads = num_threads;
     if(transformation=="linearize")
       config.data.transform = TransformType::linearize;
     else if(transformation=="none")

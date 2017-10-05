@@ -29,8 +29,8 @@ logicle_transform <- function(input, T, W, M, A, isInverse) {
     .Call(`_flowCore_logicle_transform`, input, T, W, M, A, isInverse)
 }
 
-parseFCS <- function(filename, transformation = "linearize", decades = 0, truncate_min_val = FALSE, min_limit = -111, truncate_max_range = TRUE, dataset = 1L, emptyValue = TRUE, ignoreTextOffset = TRUE, onlyTxt = FALSE) {
-    .Call(`_flowCore_parseFCS`, filename, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt)
+parseFCS <- function(filename, transformation = "linearize", decades = 0, truncate_min_val = FALSE, min_limit = -111, truncate_max_range = TRUE, dataset = 1L, emptyValue = TRUE, ignoreTextOffset = TRUE, onlyTxt = FALSE, num_threads = 1L) {
+    .Call(`_flowCore_parseFCS`, filename, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt, num_threads)
 }
 
 getData <- function(fr) {
