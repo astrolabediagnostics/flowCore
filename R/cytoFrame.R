@@ -44,7 +44,7 @@ setMethod("keyword",
     signature=signature(object="cytoFrame",
         keyword="character"),
     function(object, keyword){
-      val <- getKeyword(fr2@pointer,keyword)
+      val <- getKeyword(object@pointer,keyword)
       if(val=="")
         val <- NULL
       structure(list(val), names=keyword)
