@@ -9,6 +9,38 @@ convertRawBytes <- function(bytes, isInt, colSize, ncol, isBigEndian) {
     .Call(`_flowCore_convertRawBytes`, bytes, isInt, colSize, ncol, isBigEndian)
 }
 
+parseFCS <- function(filename, transformation = "linearize", decades = 0, truncate_min_val = FALSE, min_limit = -111, truncate_max_range = TRUE, dataset = 1L, emptyValue = TRUE, ignoreTextOffset = TRUE, onlyTxt = FALSE, num_threads = 1L) {
+    .Call(`_flowCore_parseFCS`, filename, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt, num_threads)
+}
+
+getData <- function(fr) {
+    .Call(`_flowCore_getData`, fr)
+}
+
+getKeyword <- function(fr, key) {
+    .Call(`_flowCore_getKeyword`, fr, key)
+}
+
+getKeywords <- function(fr) {
+    .Call(`_flowCore_getKeywords`, fr)
+}
+
+getncol <- function(fr) {
+    .Call(`_flowCore_getncol`, fr)
+}
+
+getnrow <- function(fr) {
+    .Call(`_flowCore_getnrow`, fr)
+}
+
+getpdata <- function(fr) {
+    .Call(`_flowCore_getpdata`, fr)
+}
+
+isCytoLibOptimum <- function() {
+    .Call(`_flowCore_isCytoLibOptimum`)
+}
+
 fcsTextParse <- function(txt, emptyValue) {
     .Call(`_flowCore_fcsTextParse`, txt, emptyValue)
 }
@@ -27,30 +59,6 @@ inPolytope <- function(data, A, b) {
 
 logicle_transform <- function(input, T, W, M, A, isInverse) {
     .Call(`_flowCore_logicle_transform`, input, T, W, M, A, isInverse)
-}
-
-parseFCS <- function(filename, transformation = "linearize", decades = 0, truncate_min_val = FALSE, min_limit = -111, truncate_max_range = TRUE, dataset = 1L, emptyValue = TRUE, ignoreTextOffset = TRUE, onlyTxt = FALSE, num_threads = 1L) {
-    .Call(`_flowCore_parseFCS`, filename, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt, num_threads)
-}
-
-getData <- function(fr) {
-    .Call(`_flowCore_getData`, fr)
-}
-
-getncol <- function(fr) {
-    .Call(`_flowCore_getncol`, fr)
-}
-
-getnrow <- function(fr) {
-    .Call(`_flowCore_getnrow`, fr)
-}
-
-getpdata <- function(fr) {
-    .Call(`_flowCore_getpdata`, fr)
-}
-
-isCytoLibOptimum <- function() {
-    .Call(`_flowCore_isCytoLibOptimum`)
 }
 
 sortBytes <- function(bytes, byte_order) {

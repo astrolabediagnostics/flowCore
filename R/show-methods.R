@@ -16,7 +16,7 @@ setMethod("show",
           definition=function(object)
       {
           
-          cat(paste("flowFrame object '", identifier(object),
+          cat(paste(class(object), " object '", identifier(object),
                     "'\nwith ", nrow(object), " cells and ",
                     ncol(object), " observables:\n", sep=""))
           show(pData(parameters(object)))

@@ -40,3 +40,35 @@ setMethod("parameters",
         as.character(parameters(object)[["name"]])
     })
 
+setMethod("keyword",
+    signature=signature(object="cytoFrame",
+        keyword="character"),
+    function(object, keyword){
+      val <- getKeyword(fr2@pointer,keyword)
+      if(val=="")
+        val <- NULL
+      structure(list(val), names=keyword)
+    })
+
+
+## this is equivalent to the description method
+setMethod("keyword",
+    signature=signature(object="cytoFrame",
+        keyword="missing"),
+    function(object, compact = FALSE)
+    {           
+      
+      desc <- getKeywords(object@pointer)
+      if(compact)
+        desc <- kwfilter(desc)
+      as.list(desc) 
+      
+    })
+
+# coerce cytoFrame to flowFrame
+as.flowFrame <- function(fr){
+  fr@exprs <- exprs(fr)
+  fr@description = keyword(fr)
+  fr@parameters <- parameters(fr)
+  as(fr, "flowFrame")
+}

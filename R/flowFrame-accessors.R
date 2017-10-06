@@ -173,12 +173,14 @@ setReplaceMethod("exprs",
 setMethod("description",
           signature=signature(object="flowFrame"),
           function(object, hideInternal=FALSE){
-              if(!hideInternal)
-                  object@description
-              else{
-                  sel <- grep("^\\$", names(object@description))
-                  object@description[-sel]
-              }})
+              
+              kw <- keyword(object)
+              if(hideInternal){
+                  sel <- grep("^\\$", names(kw))
+                  kw <- kw[-sel]
+              }
+              kw
+            })
 
 ## replace description entries
 descError <- "Replacement value must be a named list."
@@ -242,17 +244,17 @@ setMethod("keyword",
           {           
                        
                        desc <- object@description
-                       if(!compact)
-                         desc
-                       else
-                       {
-                         kn <- names(desc)
-                         pattern <- '(\\$)|(LASER)|(^P[1-9]{1,2})|(^FJ_)|(FCS)|FSC ASF|(CYTOMETER)|COMPENSATION|WINDOW|THRESHOLD|(CST )|SPILL|EXPORT |CREATOR|AUTOBS'
-                         kn <- kn[!grepl(pattern, kn)]  
-                         keyword(object, kn)
-                       } 
+                       if(compact)
+                         desc <- kwfilter(desc)
+                       desc
                        
           })
+kwfilter <- function(desc){
+  kn <- names(desc)
+  pattern <- '(\\$)|(LASER)|(^P[1-9]{1,2})|(^FJ_)|(FCS)|FSC ASF|(CYTOMETER)|COMPENSATION|WINDOW|THRESHOLD|(CST )|SPILL|EXPORT |CREATOR|AUTOBS'
+  kn <- kn[!grepl(pattern, kn)]  
+  desc[kn]
+}      
 
 ## replace keywords
 kwdError <- "Replacement value must be a named character vector or list."

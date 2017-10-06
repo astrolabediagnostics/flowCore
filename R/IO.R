@@ -69,9 +69,12 @@ read.FCS <- function(filename,
                      dataset=NULL,
                      emptyValue=TRUE,
                      fast = TRUE,
+                     num_threads = 1,
+                     out.format = c("flowFrame","cytoFrame"), 
                      ...)
 {
   if(isCytoLibOptimum()&&fast){
+    out.format <- match.arg(out.format)
     fr <- new("cytoFrame")
     if(is.null(dataset))
       dataset <- 1
@@ -80,7 +83,9 @@ read.FCS <- function(filename,
       min.limit <- -111
     }else
       truncate_min_val <- TRUE
-    fr@pointer <- parseFCS(normalizePath(filename), transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue,...)
+    fr@pointer <- parseFCS(normalizePath(filename), transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue, num_threads = num_threads,...)
+    if(out.format == "flowFrame")
+      fr <- as.flowFrame(fr)
     return(fr)
   }
     
