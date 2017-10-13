@@ -8,7 +8,8 @@ using namespace Rcpp;
 // typedef vector<pair<string, string>> kw_type;
 // typedef MemCytoFrame<vec_kw_constainer> MyMemCytoFrame;
 typedef unordered_map<string, string> kw_type;
-typedef MemCytoFrame<kw_type> MyMemCytoFrame;
+// typedef MemCytoFrame<kw_type> MyMemCytoFrame;
+typedef MemCytoFrame MyMemCytoFrame;
  // [[Rcpp::export]] 
 Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, string transformation="linearize",
                       float decades=0,
