@@ -70,7 +70,8 @@ read.FCS <- function(filename,
                      emptyValue=TRUE,
                      fast = TRUE,
                      num_threads = 1,
-                     out.format = c("flowFrame","cytoFrame"), 
+                     out.format = c("flowFrame","cytoFrame"),
+                     ignore.text.offset = FALSE,
                      ...)
 {
   if(isCytoLibOptimum()&&fast){
@@ -83,7 +84,7 @@ read.FCS <- function(filename,
       min.limit <- -111
     }else
       truncate_min_val <- TRUE
-    fr@pointer <- parseFCS(normalizePath(filename), transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue, num_threads = num_threads,...)
+    fr@pointer <- parseFCS(normalizePath(filename), transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue, num_threads = num_threads,ignoreTextOffset=ignore.text.offset,...)
     if(out.format == "flowFrame")
       fr <- as.flowFrame(fr)
     return(fr)
@@ -119,7 +120,7 @@ read.FCS <- function(filename,
     }
 
     ## read the file
-    offsets <- findOffsets(con,emptyValue=emptyValue, dataset = dataset, ...)
+    offsets <- findOffsets(con,emptyValue=emptyValue, dataset = dataset, ignore.text.offset = ignore.text.offset,...)
 
     txt <- readFCStext(con, offsets,emptyValue=emptyValue, ...)
     ## We only transform if the data in the FCS file hasn't already been

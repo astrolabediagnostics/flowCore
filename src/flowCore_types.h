@@ -14,6 +14,10 @@
 #include <cytolib/global.hpp>
 #ifdef PRT
 #include <cytolib/MemCytoFrame.hpp>
+// typedef vector<pair<string, string>> kw_type;
+// typedef MemCytoFrame<vec_kw_constainer> MyMemCytoFrame;
+typedef unordered_map<string, string> kw_type;
+typedef MemCytoFrame<kw_type> MyMemCytoFrame;
 #endif
 
 #endif /* FLOWCORE_TYPES_H_ */

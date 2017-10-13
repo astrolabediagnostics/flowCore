@@ -41,7 +41,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // parseFCS
-Rcpp::XPtr<MemCytoFrame> parseFCS(string filename, string transformation, float decades, bool truncate_min_val, float min_limit, bool truncate_max_range, int dataset, bool emptyValue, bool ignoreTextOffset, bool onlyTxt, int num_threads);
+Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, string transformation, float decades, bool truncate_min_val, float min_limit, bool truncate_max_range, int dataset, bool emptyValue, bool ignoreTextOffset, bool onlyTxt, int num_threads);
 RcppExport SEXP _flowCore_parseFCS(SEXP filenameSEXP, SEXP transformationSEXP, SEXP decadesSEXP, SEXP truncate_min_valSEXP, SEXP min_limitSEXP, SEXP truncate_max_rangeSEXP, SEXP datasetSEXP, SEXP emptyValueSEXP, SEXP ignoreTextOffsetSEXP, SEXP onlyTxtSEXP, SEXP num_threadsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -62,68 +62,68 @@ BEGIN_RCPP
 END_RCPP
 }
 // getData
-NumericVector getData(Rcpp::XPtr<MemCytoFrame> fr);
+NumericVector getData(Rcpp::XPtr<MyMemCytoFrame> fr);
 RcppExport SEXP _flowCore_getData(SEXP frSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<MemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
     rcpp_result_gen = Rcpp::wrap(getData(fr));
     return rcpp_result_gen;
 END_RCPP
 }
 // getKeyword
-string getKeyword(Rcpp::XPtr<MemCytoFrame> fr, string key);
+string getKeyword(Rcpp::XPtr<MyMemCytoFrame> fr, string key);
 RcppExport SEXP _flowCore_getKeyword(SEXP frSEXP, SEXP keySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<MemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
     Rcpp::traits::input_parameter< string >::type key(keySEXP);
     rcpp_result_gen = Rcpp::wrap(getKeyword(fr, key));
     return rcpp_result_gen;
 END_RCPP
 }
 // getKeywords
-KEY_WORDS getKeywords(Rcpp::XPtr<MemCytoFrame> fr);
+kw_type getKeywords(Rcpp::XPtr<MyMemCytoFrame> fr);
 RcppExport SEXP _flowCore_getKeywords(SEXP frSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<MemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
     rcpp_result_gen = Rcpp::wrap(getKeywords(fr));
     return rcpp_result_gen;
 END_RCPP
 }
 // getncol
-int getncol(Rcpp::XPtr<MemCytoFrame> fr);
+int getncol(Rcpp::XPtr<MyMemCytoFrame> fr);
 RcppExport SEXP _flowCore_getncol(SEXP frSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<MemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
     rcpp_result_gen = Rcpp::wrap(getncol(fr));
     return rcpp_result_gen;
 END_RCPP
 }
 // getnrow
-int getnrow(Rcpp::XPtr<MemCytoFrame> fr);
+int getnrow(Rcpp::XPtr<MyMemCytoFrame> fr);
 RcppExport SEXP _flowCore_getnrow(SEXP frSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<MemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
     rcpp_result_gen = Rcpp::wrap(getnrow(fr));
     return rcpp_result_gen;
 END_RCPP
 }
 // getpdata
-Rcpp::DataFrame getpdata(Rcpp::XPtr<MemCytoFrame> fr);
+Rcpp::DataFrame getpdata(Rcpp::XPtr<MyMemCytoFrame> fr);
 RcppExport SEXP _flowCore_getpdata(SEXP frSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<MemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
     rcpp_result_gen = Rcpp::wrap(getpdata(fr));
     return rcpp_result_gen;
 END_RCPP

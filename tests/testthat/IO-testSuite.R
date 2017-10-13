@@ -99,25 +99,25 @@ test_that("test special delimiter character: '*' ", {
   # expect_warning(
     fr <- read.FCS(file.path(dataPath, filename))
     # , "1 additional data")
-  expect_equal(summary(fr), expectRes[["read.FCS"]][["multi_data_segment"]], tolerance = 0.08, check.attributes = F)
+  expect_equal(summary(fr), expectRes[["read.FCS"]][["multi_data_segment"]], tolerance = 0.08)
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
   
 })
 
 
-
+#TODO: somehow data not exactly match the orignal , may have to do with the float conversion
 test_that("test special delimiter character: '*' ", {
     filename <- "specialDelimiter.fcs"
     fr <- read.FCS(file.path(dataPath, filename))
     expectVal <- expectRes[["read.FCS"]][["specialDelimiter"]]
-    expect_equal(summary(fr), , tolerance = 0.001, check.attributes = F)
+    expect_equal(summary(fr), expectVal, tolerance = 0.001)
     #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
     
 })
 
 
 test_that("test flowJo exported data with missing some of PnR keywords ", {
-expect_warning(expect_error(fr <- read.FCS(file.path(dataPath, "missing_PnR_flowJoExport.fcs"))
+expect_output(expect_error(fr <- read.FCS(file.path(dataPath, "missing_PnR_flowJoExport.fcs"))
                , "not contained")
                , "Missing the required \\$BEGINDATA keyword")
   
@@ -129,16 +129,15 @@ test_that("test in consistent datastart between header and TEXT", {
                    , "HEADER and the TEXT")
                 , "uneven number of tokens")
     filename <- "Accuri - C6 - A02 Spherotech 8 Peak Beads.fcs"
-     expect_output(expect_warning(fr <- read.FCS(file.path(dataPath, "Accuri-C6", filename), emptyValue = FALSE, ignore.text.offset = TRUE)
+     expect_output(fr <- read.FCS(file.path(dataPath, "Accuri-C6", filename), emptyValue = FALSE, ignore.text.offset = TRUE)
                     , "HEADER and the TEXT")
-                    , "uneven number of tokens")
      #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
      
      expect_equal(nrow(fr), 60661)
      expect_equal(summary(fr), expectRes[["read.FCS"]][["Accuri-C6"]], tolerance = 0.001)
 
-     expect_output(expect_warning(fs <- read.flowSet(file.path(dataPath, "Accuri-C6", filename), emptyValue = FALSE, ignore.text.offset = TRUE)
-                    , "HEADER and the TEXT"), "uneven number of tokens")
+     expect_output(fs <- read.flowSet(file.path(dataPath, "Accuri-C6", filename), emptyValue = FALSE, ignore.text.offset = TRUE)
+                    , "HEADER and the TEXT")
      expect_equal(nrow(fs[[1]]), 60661)
 
    })
