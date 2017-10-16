@@ -36,7 +36,8 @@ test_that("DATATYPE:'D'", {
   expect_output(fr <- read.FCS(file.path(dataPath, "double_precision", filename)), "Missing the required")
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
   expect_equal(nrow(fr), 250170)
-  
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)
 })
 
 
@@ -54,7 +55,8 @@ test_that("multi data segment", {
   fr <- read.FCS(file.path(dataPath, filename), dataset = 10)
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
   expect_equal(nrow(fr), 955)
-  
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
 })
 
 test_that("FCS with both SPILL and $SPILLOVER present", {
@@ -62,6 +64,8 @@ test_that("FCS with both SPILL and $SPILLOVER present", {
   filename <- "example-spill-spillover.fcs"
   fr <- read.FCS(file.path(dataPath, filename))
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
   
   expect_equal(keyword(fr)[["SPILL"]], keyword(fr)[["$SPILLOVER"]])
   tmp <- spillover(fr)
@@ -76,9 +80,12 @@ test_that("FCS with both SPILL and $SPILLOVER present", {
 
 test_that("test uint_64 + diverse bitwidths + missing $NEXTDATA: '*' ", {
       filename <- "uint_64.lxb"
-      expect_warning(fr <- read.FCS(file.path(dataPath, filename)))
+      # expect_warning(
+        fr <- read.FCS(file.path(dataPath, filename))
+                     # )
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
-  
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
     })
 
 
@@ -87,6 +94,8 @@ test_that("mixed endian", {
   filename <- "mixedEndian.fcs"
   fr <- read.FCS(file.path(dataPath, filename))
   expect_is(fr, "flowFrame")
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-7)  
   # expect_equal(summary(fr), expectRes[["read.FCS"]][["mixedEndian"]])
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
   
@@ -101,18 +110,21 @@ test_that("test special delimiter character: '*' ", {
     # , "1 additional data")
   expect_equal(summary(fr), expectRes[["read.FCS"]][["multi_data_segment"]], tolerance = 0.08)
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-  
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 1e-4)  
 })
 
 
 #TODO: somehow data not exactly match the orignal , may have to do with the float conversion
+#check discrepancy
 test_that("test special delimiter character: '*' ", {
     filename <- "specialDelimiter.fcs"
     fr <- read.FCS(file.path(dataPath, filename))
     expectVal <- expectRes[["read.FCS"]][["specialDelimiter"]]
     expect_equal(summary(fr), expectVal, tolerance = 0.001)
     #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-    
+    thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+    expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
 })
 
 
@@ -132,6 +144,8 @@ test_that("test in consistent datastart between header and TEXT", {
      expect_output(fr <- read.FCS(file.path(dataPath, "Accuri-C6", filename), emptyValue = FALSE, ignore.text.offset = TRUE)
                     , "HEADER and the TEXT")
      #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
+     thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+     expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-7)  
      
      expect_equal(nrow(fr), 60661)
      expect_equal(summary(fr), expectRes[["read.FCS"]][["Accuri-C6"]], tolerance = 0.001)
@@ -147,7 +161,9 @@ test_that("test odd-bitwidth FCS", {
       fr <- read.FCS(file.path(dataPath, filename))
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
       keyword(fr)[["FILENAME"]] <- "setToDummy" 
-      expect_equal(expectRes[["read.FCS"]][["Sample2"]], digest(fr))
+      # expect_equal(expectRes[["read.FCS"]][["Sample2"]], digest(fr))
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
       
       filename <- "11ColorSmall.fcs"
       fr <- read.FCS(file.path(dataPath, "oddbitwith", filename))
@@ -171,26 +187,31 @@ test_that("test other FCS", {
     filename <- "20110125240_F06_I025.fcs"
     fr <- read.FCS(file.path(dataPath, filename))
     #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-    keyword(fr)[["FILENAME"]] <- "setToDummy"
-    expect_equal(expectRes[["read.FCS"]][["ITN029ST"]], digest(fr))
-    
+    # keyword(fr)[["FILENAME"]] <- "setToDummy"
+    # expect_equal(expectRes[["read.FCS"]][["ITN029ST"]], digest(fr))
+    thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+    expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
     
     fr <- read.FCS(list.files(system.file("extdata", package="flowCore"),full=T)[1])
-    keyword(fr)[["FILENAME"]] <- "setToDummy"
-    expect_equal(expectRes[["read.FCS"]][["flowCore"]], digest(fr))
+    # keyword(fr)[["FILENAME"]] <- "setToDummy"
+    # expect_equal(expectRes[["read.FCS"]][["flowCore"]], digest(fr))
     
     filename <- "Blank.FCS"
     fr <- read.FCS(file.path(dataPath, filename))
     #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-    keyword(fr)[["FILENAME"]] <- "setToDummy"
-    expect_equal(expectRes[["read.FCS"]][["Blank"]], digest(fr))
+    # keyword(fr)[["FILENAME"]] <- "setToDummy"
+    # expect_equal(expectRes[["read.FCS"]][["Blank"]], digest(fr))
+    thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+    expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
     
     filename <- "Bendall et al Cell Sample A_basal.fcs"
     expect_output(fr <- read.FCS(file.path(dataPath, filename))
                   , "dropped")
     #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-    keyword(fr)[["FILENAME"]] <- "setToDummy"
-    expect_equal(expectRes[["read.FCS"]][["Bendall"]], digest(fr))              
+    # keyword(fr)[["FILENAME"]] <- "setToDummy"
+    # expect_equal(expectRes[["read.FCS"]][["Bendall"]], digest(fr))
+    thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+    expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
 })
 
 
@@ -200,27 +221,35 @@ test_that("test delimiter issue", {
           , "Empty keyword name detected")
       fr <- read.FCS(file.path(dataPath, filename), emptyValue = F)
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["GFP2Kfold"]], digest(fr))
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["GFP2Kfold"]], digest(fr))
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
       
       filename <- "RAINBOW_OK.fcs"
       fr <- read.FCS(file.path(dataPath, filename))
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["RAINBOW"]], digest(fr))
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["RAINBOW"]], digest(fr))
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+      
       fr <- read.FCS(file.path(dataPath, filename), emptyValue = F)
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["RAINBOWEmptyValue"]], digest(fr))               
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["RAINBOWEmptyValue"]], digest(fr))               
 
       #\ as delimiter  with empty value
       filename <- "sample_1071.001"
       fr <- read.FCS(file.path(dataPath, filename))
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["sample1071"]], digest(fr))
-      fr <-read.FCS(file.path(dataPath, filename),emptyValue=F)
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["sample1071.double"]], digest(fr))
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+      
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["sample1071"]], digest(fr))
+      # fr <-read.FCS(file.path(dataPath, filename),emptyValue=F)
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["sample1071.double"]], digest(fr))
     })
 
 
@@ -229,7 +258,7 @@ test_that("test Beckman_Coulter_XDP issue", {
                 
       frList <- lapply(list.files(file.path(dataPath, "Beckman_Coulter/Beckman_Coulter_XDP/"),full=T)
                         , function(thisFile){
-                          fr <- read.FCS(thisFile)
+                          fr <- read.FCS(thisFile, fast = F)
                           keyword(fr)[["FILENAME"]] <- "setToDummy"
                         })
       expect_equal(expectRes[["read.FCS"]][["BeckmanCoulterXDP"]], digest(frList))
@@ -239,7 +268,7 @@ test_that("test Beckman_Coulter_XDP issue", {
 test_that("test Beckman_Coulter $SPILLOVER keyword", {
       frList <- lapply(list.files(file.path(dataPath, "Beckman_Coulter"),full=T, pattern = ".fcs")
                     , function(thisFile){
-                     fr <- read.FCS(thisFile)
+                     fr <- read.FCS(thisFile, fast = F)
                      keyword(fr)[["FILENAME"]] <- "setToDummy"
                     })
       expect_equal(expectRes[["read.FCS"]][["BeckmanCoulterSPILLOVER"]], digest(frList))
@@ -343,43 +372,62 @@ test_that("test pre-gated data", {
   filename <- "HC002_Col1_P3.fcs"
   fr <- read.FCS(file.path(dataPath, filename))
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-  keyword(fr)[["FILENAME"]] <- "setToDummy"
-  expect_equal(expectRes[["read.FCS"]][["HC002_Col1_P3"]], digest(fr))
+  # keyword(fr)[["FILENAME"]] <- "setToDummy"
+  # expect_equal(expectRes[["read.FCS"]][["HC002_Col1_P3"]], digest(fr))
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+  
   
   filename <- "HC002_Col1.fcs"
   fr <- read.FCS(file.path(dataPath, filename))
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-  keyword(fr)[["FILENAME"]] <- "setToDummy"
-  expect_equal(expectRes[["read.FCS"]][["HC002_Col1"]], digest(fr))
-
+  # keyword(fr)[["FILENAME"]] <- "setToDummy"
+  # expect_equal(expectRes[["read.FCS"]][["HC002_Col1"]], digest(fr))
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+  
+  
 })
 
 test_that("test flowJo exported data with offset = 99999999 and  missing the $BEGINDATA and $ENDDATA keywords ", {
     filename <- "badFlowJoExport.fcs"
   fr <- read.FCS(file.path(dataPath, filename))
-      #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["badFlowJoExport"]], digest(fr))
+  thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+  
+  #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["badFlowJoExport"]], digest(fr))
     })
 
 test_that("test integer overflow issue", {
       filename <- "intOverFlow.fcs"
       fr <- read.FCS(file.path(dataPath, filename))
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+      
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["intOverFlow"]], digest(fr))
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["intOverFlow"]], digest(fr))
       
       filename <- "MoFlo Astrios EQ 9C bis all.fcs"
       fr <- read.FCS(file.path(dataPath,"/Beckman_Coulter", filename))
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+      
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["MoFlo EQ 9C"]],  digest(fr))
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["MoFlo EQ 9C"]],  digest(fr))
     })
 
 test_that("test diverse Bitwidths", {
       filename <- "diverseBitwidths.fcs"
       fr <- read.FCS(file.path(dataPath, filename))
+      thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
+      expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
+      
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
-      keyword(fr)[["FILENAME"]] <- "setToDummy"
-      expect_equal(expectRes[["read.FCS"]][["diverseBitwidths"]], digest(fr))
+      # keyword(fr)[["FILENAME"]] <- "setToDummy"
+      # expect_equal(expectRes[["read.FCS"]][["diverseBitwidths"]], digest(fr))
     })
+
