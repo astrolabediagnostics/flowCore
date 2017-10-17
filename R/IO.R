@@ -84,7 +84,11 @@ read.FCS <- function(filename,
       min.limit <- -111
     }else
       truncate_min_val <- TRUE
-    fr@pointer <- parseFCS(normalizePath(filename), transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue, num_threads = num_threads,ignoreTextOffset=ignore.text.offset,...)
+    if(is.null(which.lines))
+      which.lines <- vector()
+    else
+      which.lines <- which.lines -1
+    fr@pointer <- parseFCS(normalizePath(filename), which.lines, transformation, decades, truncate_min_val, min.limit, truncate_max_range, dataset, emptyValue, num_threads = num_threads,ignoreTextOffset=ignore.text.offset,...)
     if(out.format == "flowFrame")
       fr <- as.flowFrame(fr)
     return(fr)
@@ -818,8 +822,7 @@ readFCSdata <- function(con, offsets, x, transformation, which.lines,
         which.lines <- sort(which.lines)
         outrange <- length(which(which.lines > nrowTotal))
         if(outrange!=0)
-            stop("Some or all the line indices specified are greater that the",
-                 "number of collected events.\n")
+            stop("the index of which.lines exceeds the data boundary.\n")
         dat <- c()
         for (i in 1:length(which.lines)){
             startP <- offsets["datastart"] + (which.lines[i]-1) * nrpar * size

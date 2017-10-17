@@ -20,8 +20,8 @@ expectRes.new <- readRDS("~/rglab/workspace/flowCore/tests/testthat/expectRes.ne
 # })
 # expectRes.new <- list()
 test_that("big file", {
-  expect_error(fr <- read.FCS(file.path(dataPath, "gigantic_file.fcs")), "integer limits")
-  expect_error(fr <- read.FCS(file.path(dataPath, "gigantic_file.fcs"), which.lines = c(1,1e9)), "number of collected events")
+  # expect_error(fr <- read.FCS(file.path(dataPath, "gigantic_file.fcs")), "integer limits")
+  expect_error(fr <- read.FCS(file.path(dataPath, "gigantic_file.fcs"), which.lines = c(1,1e9)), "exceeds the data boundary")
   fr <- read.FCS(file.path(dataPath, "gigantic_file.fcs"), which.lines = 1:1e3)
   expect_equal(nrow(fr), 1e3)
   fr <- read.FCS(file.path(dataPath, "gigantic_file.fcs"), which.lines = (1e3+1):2e3)
@@ -111,7 +111,7 @@ test_that("test special delimiter character: '*' ", {
   expect_equal(summary(fr), expectRes[["read.FCS"]][["multi_data_segment"]], tolerance = 0.08)
   #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
   thisRes <- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))
-  expect_equal(thisRes, expectRes.new[[filename]], tol = 1e-4)  
+  expect_equal(thisRes, expectRes.new[[filename]], tol = 1e-7)  
 })
 
 

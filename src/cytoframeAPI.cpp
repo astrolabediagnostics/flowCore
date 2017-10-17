@@ -11,7 +11,8 @@ typedef unordered_map<string, string> kw_type;
 // typedef MemCytoFrame<kw_type> MyMemCytoFrame;
 typedef MemCytoFrame MyMemCytoFrame;
  // [[Rcpp::export]] 
-Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, string transformation="linearize",
+Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, vector<int> which_lines
+                                      ,string transformation="linearize",
                       float decades=0,
                       bool truncate_min_val = false,
                       float min_limit=-111,
@@ -28,6 +29,7 @@ Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, string transformation="line
     config.header.nDataset = dataset;
     config.header.isEmptyKeyValue = emptyValue;
 
+    config.data.which_lines = which_lines;
     config.data.decades = decades;
     config.data.truncate_min_val = truncate_min_val;
     config.data.min_limit = min_limit;
