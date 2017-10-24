@@ -158,7 +158,7 @@ test_that("test in consistent datastart between header and TEXT", {
 
 test_that("test odd-bitwidth FCS", {
       filename <- "Sample 2.fcs"
-      fr <- read.FCS(file.path(dataPath, filename))
+      fr <- read.FCS(file.path(dataPath, filename), fast = F)
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
       keyword(fr)[["FILENAME"]] <- "setToDummy" 
       # expect_equal(expectRes[["read.FCS"]][["Sample2"]], digest(fr))
@@ -166,7 +166,7 @@ test_that("test odd-bitwidth FCS", {
       expect_equal(thisRes, expectRes.new[[filename]], tol = 6e-8)  
       
       filename <- "11ColorSmall.fcs"
-      fr <- read.FCS(file.path(dataPath, "oddbitwith", filename))
+      fr <- read.FCS(file.path(dataPath, "oddbitwith", filename), fast = F)
       #expectRes.new[[filename]] <<- list(ncol = ncol(fr), nrow = nrow(fr), chnl = colnames(fr), marker = markernames(fr), range = range(fr), range_data= range(fr, "data"), colmean = colMeans(exprs(fr)))  
       keyword(fr)[["FILENAME"]] <- "setToDummy"
       expect_equal(expectRes[["read.FCS"]][["11ColorSmall"]], digest(fr))
