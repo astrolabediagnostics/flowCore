@@ -1,5 +1,5 @@
 CXX_STD = CXX11
-PKG_LIBS =`${R_HOME}/bin/Rscript -e "cytolib:::LdFlags()"`
+PKG_LIBS =`${R_HOME}/bin/Rscript -e "cytolib:::LdFlags();cat(' ');Rhdf5lib::pkgconfig('PKG_CXX_LIBS')"`
 
 .PHONY: all clean 
 
