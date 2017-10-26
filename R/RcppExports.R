@@ -9,6 +9,10 @@ convertRawBytes <- function(bytes, isInt, colSize, ncol, isBigEndian) {
     .Call(`_flowCore_convertRawBytes`, bytes, isInt, colSize, ncol, isBigEndian)
 }
 
+writeH5 <- function(fr, filename) {
+    invisible(.Call(`_flowCore_writeH5`, fr, filename))
+}
+
 parseFCS <- function(filename, which_lines, transformation = "linearize", decades = 0, truncate_min_val = FALSE, min_limit = -111, truncate_max_range = TRUE, dataset = 1L, emptyValue = TRUE, ignoreTextOffset = TRUE, onlyTxt = FALSE, num_threads = 1L) {
     .Call(`_flowCore_parseFCS`, filename, which_lines, transformation, decades, truncate_min_val, min_limit, truncate_max_range, dataset, emptyValue, ignoreTextOffset, onlyTxt, num_threads)
 }

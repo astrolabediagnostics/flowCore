@@ -72,3 +72,11 @@ as.flowFrame <- function(fr){
   fr@parameters <- parameters(fr)
   as(fr, "flowFrame")
 }
+
+#' save the cytoFrame as h5 format
+#' @param fr cytoFrame object
+#' @param filename the full path of the output h5 file
+#' @export
+write.h5 <- function(fr, filename){
+  writeH5(fr@pointer,filename)
+}

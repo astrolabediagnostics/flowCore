@@ -10,7 +10,15 @@ using namespace Rcpp;
 typedef unordered_map<string, string> kw_type;
 // typedef MemCytoFrame<kw_type> MyMemCytoFrame;
 typedef MemCytoFrame MyMemCytoFrame;
- // [[Rcpp::export]] 
+
+// [[Rcpp::export]] 
+void writeH5(Rcpp::XPtr<MyMemCytoFrame> fr, string filename){
+  fr->writeH5(filename);
+  
+}
+                                      
+
+// [[Rcpp::export]] 
 Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, vector<int> which_lines
                                       ,string transformation="linearize",
                       float decades=0,
