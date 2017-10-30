@@ -59,10 +59,14 @@ setMethod("keyword",
     {           
       
       desc <- getKeywords(object@pointer)
+
       if(compact)
         desc <- kwfilter(desc)
-      as.list(desc) 
-      
+      desc <- as.list(desc) 
+      FCSversion <- desc[["FCSversion"]]
+      desc[["FCSversion"]] <- NULL
+      desc <- c(FCSversion = FCSversion, desc)  
+      desc
     })
 
 # coerce cytoFrame to flowFrame
