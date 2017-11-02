@@ -64,7 +64,7 @@ NumericVector getData(Rcpp::XPtr<MyMemCytoFrame> fr){
   int ncol = fr->nCol();
   int ntotal = ncol * nrow;
   
-  float * dat = fr->getData();
+  EVENT_DATA_TYPE * dat = &fr->getData()[0];
   NumericVector mat(dat, dat + ntotal);
   mat.attr("dim") = Dimension(nrow, ncol);
   StringVector chnl = wrap(fr->getChannels());
