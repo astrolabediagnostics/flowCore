@@ -51,6 +51,30 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// setMarker
+void setMarker(Rcpp::XPtr<MyMemCytoFrame> fr, string old, string new_name);
+RcppExport SEXP _flowCore_setMarker(SEXP frSEXP, SEXP oldSEXP, SEXP new_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< string >::type old(oldSEXP);
+    Rcpp::traits::input_parameter< string >::type new_name(new_nameSEXP);
+    setMarker(fr, old, new_name);
+    return R_NilValue;
+END_RCPP
+}
+// setChannel
+void setChannel(Rcpp::XPtr<MyMemCytoFrame> fr, string old, string new_name);
+RcppExport SEXP _flowCore_setChannel(SEXP frSEXP, SEXP oldSEXP, SEXP new_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<MyMemCytoFrame> >::type fr(frSEXP);
+    Rcpp::traits::input_parameter< string >::type old(oldSEXP);
+    Rcpp::traits::input_parameter< string >::type new_name(new_nameSEXP);
+    setChannel(fr, old, new_name);
+    return R_NilValue;
+END_RCPP
+}
 // parseFCS
 Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, vector<int> which_lines, string transformation, float decades, bool truncate_min_val, float min_limit, bool truncate_max_range, int dataset, bool emptyValue, bool ignoreTextOffset, bool onlyTxt, int num_threads);
 RcppExport SEXP _flowCore_parseFCS(SEXP filenameSEXP, SEXP which_linesSEXP, SEXP transformationSEXP, SEXP decadesSEXP, SEXP truncate_min_valSEXP, SEXP min_limitSEXP, SEXP truncate_max_rangeSEXP, SEXP datasetSEXP, SEXP emptyValueSEXP, SEXP ignoreTextOffsetSEXP, SEXP onlyTxtSEXP, SEXP num_threadsSEXP) {
@@ -248,6 +272,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_flowCore_biexponential_transform", (DL_FUNC) &_flowCore_biexponential_transform, 9},
     {"_flowCore_convertRawBytes", (DL_FUNC) &_flowCore_convertRawBytes, 5},
     {"_flowCore_writeH5", (DL_FUNC) &_flowCore_writeH5, 2},
+    {"_flowCore_setMarker", (DL_FUNC) &_flowCore_setMarker, 3},
+    {"_flowCore_setChannel", (DL_FUNC) &_flowCore_setChannel, 3},
     {"_flowCore_parseFCS", (DL_FUNC) &_flowCore_parseFCS, 12},
     {"_flowCore_getData", (DL_FUNC) &_flowCore_getData, 1},
     {"_flowCore_getKeyword", (DL_FUNC) &_flowCore_getKeyword, 2},

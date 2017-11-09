@@ -59,6 +59,7 @@ Collate:
     workFlow-accessors.R
     filterResultList-accessors.R
     cytoFrame.R
+    cytoSet.R
     IO.R
     show-methods.R
     length-methods.R

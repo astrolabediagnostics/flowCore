@@ -373,9 +373,9 @@ setGeneric("markernames",function(object,...) standardGeneric("markernames"))
 setMethod("markernames",
     signature=signature(object="flowFrame"),
     definition=function(object){
-      
-      markers <- as.vector(object@parameters$desc)
-      ind <- grepl("time|fsc|ssc", object@parameters$name, ignore.case = TRUE)
+      param <- parameters(object)
+      markers <- as.vector(param[["desc"]])
+      ind <- grepl("time|fsc|ssc", param[["name"]], ignore.case = TRUE)
       markers <- markers[!ind]
       markers[!is.na(markers)]
     })
@@ -412,7 +412,7 @@ setReplaceMethod("markernames",
 setMethod("colnames",
           signature=signature(x="flowFrame"),
           definition=function(x, do.NULL="missing", prefix="missing")
-          as.vector(x@parameters$name)
+          as.vector(parameters(x)[["name"]])
           )
 
 setReplaceMethod("colnames",

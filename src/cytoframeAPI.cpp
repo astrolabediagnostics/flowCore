@@ -16,8 +16,17 @@ void writeH5(Rcpp::XPtr<MyMemCytoFrame> fr, string filename){
   fr->writeH5(filename);
   
 }
-                                      
 
+// [[Rcpp::export]] 
+void setMarker(Rcpp::XPtr<MyMemCytoFrame> fr, string old, string new_name){
+  fr->setMarker(old, new_name);
+}                                      
+
+// [[Rcpp::export]] 
+void setChannel(Rcpp::XPtr<MyMemCytoFrame> fr, string old, string new_name){
+  fr->setChannel(old, new_name);
+}                                      
+                                      
 // [[Rcpp::export]] 
 Rcpp::XPtr<MyMemCytoFrame> parseFCS(string filename, vector<int> which_lines
                                       ,string transformation="linearize",
