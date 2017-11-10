@@ -172,7 +172,7 @@ setMethod("phenoData<-",
 ## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 setMethod("pData",
 		signature=signature(object="flowSet"),
-		definition=function(object) pData(object@phenoData))
+		definition=function(object) pData(phenoData(object)))
 
 setReplaceMethod("pData",
 		signature=signature(object="flowSet",

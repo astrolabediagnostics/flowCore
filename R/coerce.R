@@ -222,6 +222,11 @@ setAs(from="environment", to="flowSet", def=function(from)
       frameList <- ls(envir = from)
       isFrame <- sapply(frameList, function(f) is(get(f, envir = from),
                                                   "flowFrame"))
+      iscytoFrame <- sapply(frameList, function(f) is(get(f, envir = from),
+                "cytoFrame"))
+      if(any(iscytoFrame)&&!all(iscytoFrame))
+        stop("Some frames are not cytoFrames!")
+      
       if(!all(isFrame))
           warning("Some symbols are not flowFrames.",
                   "They will be ignored but left intact.")
@@ -245,6 +250,9 @@ setAs(from="environment", to="flowSet", def=function(from)
       }
       if(!all(apply(colNames, 2, "==", colNames[,1])))
           stop("Column names for all frames do not match.")
+      if(any(iscytoFrame))
+        new("cytoSet", frames=from)
+      else
       new("flowSet", frames=from, colnames=colNames[,1],
           phenoData=new("AnnotatedDataFrame",
                         data=data.frame(name=I(frameList), row.names=frameList),

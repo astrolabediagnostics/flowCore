@@ -978,7 +978,10 @@ read.flowSet <- function(files=NULL, path=".", pattern=NULL, phenoData,
                          transformation="linearize", which.lines=NULL,
                          column.pattern=NULL, invert.pattern = FALSE, decades=0,
                          sep="\t", as.is=TRUE, name, ncdf=FALSE, dataset=NULL,
-                         min.limit=NULL, truncate_max_range = TRUE, emptyValue=TRUE, ignore.text.offset = FALSE, ...)
+                         min.limit=NULL, truncate_max_range = TRUE, emptyValue=TRUE, ignore.text.offset = FALSE,
+                         fast = TRUE,
+                         num_threads = 1,
+                         out.format = c("flowFrame","cytoFrame"),...)
 {
     if(ncdf)
       .Deprecated("'ncdf' argument is deprecated!Please use 'ncdfFlow' package for hdf5-based data structure.")
@@ -1053,7 +1056,11 @@ read.flowSet <- function(files=NULL, path=".", pattern=NULL, phenoData,
                       decades=decades,min.limit=min.limit,emptyValue=emptyValue
                       , ignore.text.offset = ignore.text.offset
                       , dataset=dataset
-                      , truncate_max_range = truncate_max_range)
+                      , truncate_max_range = truncate_max_range
+                      , fast = fast
+                      , num_threads = num_threads
+                      , out.format = out.format
+                )
     ## Allows us to specify a particular keyword to use as our sampleNames
     ## rather than requiring the GUID or the filename be used. This is handy
     ## when something like SAMPLE ID is a more reasonable choice.
